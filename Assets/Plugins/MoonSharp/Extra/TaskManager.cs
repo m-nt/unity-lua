@@ -11,19 +11,60 @@ namespace UnityLua
         
         private static readonly Queue<Action> queue = new Queue<Action>();
         public static TaskManager self = null;
-		void Awake() {
-			if (self == null) {
-				self = this;
-				DontDestroyOnLoad(gameObject);
-			} else {
-				Destroy(this);
-			}
-		}
+        public void Enqueue(IEnumerator action) {
+            lock (queue) {
+                queue.Enqueue (() => {
+                    StartCoroutine (action);
+                });
+            }
+        }
+        public void Enqueue(Action action) {
+            lock (queue) {
+                queue.Enqueue (() => {
+                    ActionWrapper(action);
+                });
+            }
+        }
+        public Task EnqueueAsync(Action action)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            void WrappedAction() {
+                try 
+                {
+                    action();
+                    tcs.TrySetResult(true);
+                } catch (Exception ex) 
+                {
+                    tcs.TrySetException(ex);
+                }
+            }
+
+            Enqueue(ActionWrapper(WrappedAction));
+            return tcs.Task;
+        }
+        IEnumerator ActionWrapper(Action action)
+        {
+            action();
+            yield return null;
+        }
+        void Awake() {
+            if (self == null) {
+                self = this;
+                DontDestroyOnLoad(gameObject);
+            } else {
+                Destroy(this);
+            }
+        }
 
         // Update is called once per frame
-        void Update()
-        {
-
+        void Update() {
+            lock (queue) {
+                while (queue.Count > 0)
+                {
+                    queue.Dequeue().Invoke();
+                }
+            }
         }
     }
 }

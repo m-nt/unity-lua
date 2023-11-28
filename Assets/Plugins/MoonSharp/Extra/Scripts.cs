@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using PimDeWitte.UnityMainThreadDispatcher;
 
 namespace UnityLua {
     public class Scripts : MonoBehaviour
