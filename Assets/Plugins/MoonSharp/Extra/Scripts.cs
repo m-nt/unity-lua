@@ -16,11 +16,15 @@ namespace UnityLua {
             Debug.LogError($"[Lua] - {value}");
         }
         void Wait(int ms) {
-            Thread.Sleep(ms);
+            Task.Delay(ms);
         }
-        // async void RegisterTask(string name, DynValue callback) {
-
-        // }
+        private void Start() {
+            StartCoroutine(_Start());
+        }
+        IEnumerator _Start() {
+            yield return new WaitForSeconds(5);
+            StartCoroutine(TaskManager.self.TriggerEvent("hello", this.gameObject, new EventArgs()));
+        }
         public void AddScript(string path, string script)
         {
             Script s = baseScripts;
@@ -48,12 +52,18 @@ namespace UnityLua {
                 DestroyImmediate(this);
             }
             baseScripts = new Script(CoreModules.Preset_Complete);
+            // shared types
+            UserData.RegisterType<EventArgs>();
+            UserData.RegisterType<GameObject>();
+            // UserData.RegisterType<object>();
             // load all natives for the lua file
             baseScripts.Globals["DebugError"] = (Action<object>)DebugError;
             baseScripts.Globals["Wait"] = (Action<int>)Wait;
             baseScripts.Globals["LoadObject"] = (Func<string, string>)ResourceManager.self.LoadObject;
             baseScripts.Globals["CreateObject"] = (Action<string>)ResourceManager.self.CreateObject;
             baseScripts.Globals["ObjectExists"] = (Func<string, bool>)ResourceManager.self.ObjectExists;
+            baseScripts.Globals["RegisterCommand"] = (Action<string, DynValue>)ResourceManager.self.RegisterCommand;
+            baseScripts.Globals["TriggerCommand"] = (Action<string, GameObject, EventArgs>)ResourceManager.self.TriggerCommand;
         }
     }
 }
