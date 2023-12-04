@@ -15,15 +15,8 @@ namespace UnityLua {
         void DebugError(object value){
             Debug.LogError($"[Lua] - {value}");
         }
-        void Wait(int ms) {
-            Task.Delay(ms);
-        }
-        private void Start() {
-            StartCoroutine(_Start());
-        }
-        IEnumerator _Start() {
-            yield return new WaitForSeconds(5);
-            StartCoroutine(TaskManager.self.TriggerEvent("hello", this.gameObject, new EventArgs()));
+        public void Wait(int ms) {
+            Task.Delay(ms).Wait();
         }
         public void AddScript(string path, string script)
         {
@@ -57,13 +50,15 @@ namespace UnityLua {
             UserData.RegisterType<GameObject>();
             // UserData.RegisterType<object>();
             // load all natives for the lua file
-            baseScripts.Globals["DebugError"] = (Action<object>)DebugError;
+            baseScripts.Globals["Print"] = (Action<object>)DebugError;
             baseScripts.Globals["Wait"] = (Action<int>)Wait;
             baseScripts.Globals["LoadObject"] = (Func<string, string>)ResourceManager.self.LoadObject;
-            baseScripts.Globals["CreateObject"] = (Action<string>)ResourceManager.self.CreateObject;
+            baseScripts.Globals["CreateObject"] = (Func<string,float,float,float,string>)ResourceManager.self.CreateObject;
             baseScripts.Globals["ObjectExists"] = (Func<string, bool>)ResourceManager.self.ObjectExists;
             baseScripts.Globals["RegisterCommand"] = (Action<string, DynValue>)ResourceManager.self.RegisterCommand;
-            baseScripts.Globals["TriggerCommand"] = (Action<string, GameObject, EventArgs>)ResourceManager.self.TriggerCommand;
+            baseScripts.Globals["TriggerCommand"] = (Action<string, GameObject, string[]>)ResourceManager.self.TriggerCommand;
+            baseScripts.Globals["IsValidObject"] = (Func<string, bool>)ResourceManager.self.IsValidObject;
+            baseScripts.Globals["MoveObject"] = (Action<string, float, float, float>)ResourceManager.self.MoveObject;
         }
     }
 }

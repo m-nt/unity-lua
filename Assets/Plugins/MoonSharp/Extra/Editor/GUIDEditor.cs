@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GUID))]
+[CustomEditor(typeof(UnityLua.GUID))]
 public class GUIDEditor : Editor
 {
     private SerializedProperty type;
@@ -13,7 +13,7 @@ public class GUIDEditor : Editor
         serializedObject.Update();
         SerializedProperty guid = serializedObject.FindProperty("guid");
         SerializedProperty update = serializedObject.FindProperty("update");
-        GUILayout.Label($"GUID: {guid.stringValue}");
+        GUILayout.TextField($"GUID: {guid.stringValue}");
         if (GUILayout.Button("Update"))
             update.boolValue = true;
     }

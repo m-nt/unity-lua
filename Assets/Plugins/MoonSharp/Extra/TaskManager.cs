@@ -37,10 +37,12 @@ namespace UnityLua
         public void RemoveListener(string name) {
             eventList.Remove(name);
         }
-        public IEnumerator TriggerEvent(string name, GameObject sender, EventArgs args) {
+        public void TriggerEvent(string name, GameObject sender, string[] args) {
             eventList.TryGetValue(name, out DynValue _calBack);
+            Task.Run(() => {
             _calBack?.Function.Call(sender, args);
-            yield return new WaitForEndOfFrame();
+            });
+            // yield return new WaitForEndOfFrame();
         }
         public IEnumerator TriggerEvent(DynValue function) {
             eventHandler?.Invoke(function);

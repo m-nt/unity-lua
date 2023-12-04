@@ -1,11 +1,17 @@
-DebugError("hello")
-obj_guid = LoadObject("TestPrefab")
-DebugError(obj_guid)
-while not ObjectExists(obj_guid) do
-    Wait(10)
-end
-RegisterCommand("hello", function (sender, args)
-    DebugError("hello from lua")
+RegisterCommand("create", function (sender, args)
+    if not IsValidObject(args[1]) then
+        Print("Not a Valid Object");
+        return;
+    end
+    obj_guid = LoadObject(args[1])
+    while not ObjectExists(obj_guid) do
+        Wait(10)
+    end
+    ref_id = CreateObject(obj_guid, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))
+    Print(ref_id)
+    MoveObject(ref_id,1,1,1);
 end)
-CreateObject(obj_guid)
--- TriggerCommand("hello")
+RegisterCommand("move", function (_,args)
+    MoveObject(args[1],tonumber(args[2]),tonumber(args[3]),tonumber(args[4]))
+end)
+
