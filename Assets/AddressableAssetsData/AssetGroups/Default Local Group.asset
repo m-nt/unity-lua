@@ -22,8 +22,15 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 8150438448474046907, guid: 771fdae8b80da6a48b39d78675e3c4b2, type: 3}
+    m_TargetAsset: {fileID: 8150438448474046907, guid: 771fdae8b80da6a48b39d78675e3c4b2, type: 3}
+  - m_GUID: 78f36849810a59f43b5c1239b8a2178a
+    m_Address: Blue Square.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    m_MainAsset: {fileID: 2897965338845868310, guid: 78f36849810a59f43b5c1239b8a2178a, type: 3}
+    m_TargetAsset: {fileID: 2897965338845868310, guid: 78f36849810a59f43b5c1239b8a2178a, type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 05235f30612f979409ee97a20f655346, type: 2}
   m_SchemaSet:

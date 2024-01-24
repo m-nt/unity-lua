@@ -441,7 +441,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guid: af670e10-dc99-40cb-9c2a-5021cce566c0
-  update: 0
 --- !u!1 &1022149481
 GameObject:
   m_ObjectHideFlags: 0
